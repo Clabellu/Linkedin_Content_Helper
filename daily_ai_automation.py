@@ -376,59 +376,41 @@ def generate_post_image_google(image_generation_prompt, output_filepath, api_key
 
 def generate_post_image_ai(image_generation_prompt, output_filepath, api_key):
     """
-    Genera un'immagine basata su un prompt testuale usando OpenAI API aggiornata
+    Genera un'immagine basata su un prompt testuale usando OpenAI DALL-E 3 API
     """
     logging.info(f"Richiesta generazione immagine AI: '{image_generation_prompt[:100]}...'")
-    
+
     try:
         client = openai.OpenAI(api_key=api_key)
 
-        # Usa la nuova API OpenAI come nel file originale
-        response = client.responses.create(
-            model="gpt-4o-mini",
-            input=image_generation_prompt,
-            tools=[
-                {
-                    "type": "image_generation",
-                    "quality": "auto",
-                    "size": "1024x1024" 
-                }
-            ],
+        # Usa l'API corretta di OpenAI per la generazione di immagini con DALL-E 3
+        response = client.images.generate(
+            model="dall-e-3",
+            prompt=image_generation_prompt,
+            size="1024x1024",
+            quality="standard",
+            n=1
         )
 
-        # Gestione della risposta base64
-        image_data_list = [
-            output.result
-            for output in response.output
-            if output.type == "image_generation_call"
-        ]
+        # Estrae l'URL dell'immagine generata
+        image_url = response.data[0].url
 
-        if image_data_list:
-            image_base64 = image_data_list[0]
-            # Decodifica base64 in byte
-            image_bytes = base64.b64decode(image_base64)
-            
-            # Salva l'immagine
-            with open(output_filepath, 'wb') as f:
-                f.write(image_bytes)
-            
-            logging.info(f"Immagine AI salvata: {output_filepath}")
-            
-            # Log del prompt migliorato se disponibile
-            revised_prompt = [
-                output.revised_prompt
-                for output in response.output
-                if output.type == "image_generation_call" and hasattr(output, 'revised_prompt')
-            ]
-            if revised_prompt:
-                logging.info(f"Prompt migliorato dall'AI: '{revised_prompt[0][:100]}...'")
+        # Scarica l'immagine dall'URL
+        import requests
+        image_response = requests.get(image_url, timeout=30)
+        image_response.raise_for_status()
 
-            return True
-        else:
-            logging.error("Risposta API non contiene immagine generata")
-            if response.output:
-                logging.error(f"Output ricevuto: {response.output}")
-            return False
+        # Salva l'immagine nel file
+        with open(output_filepath, 'wb') as f:
+            f.write(image_response.content)
+
+        logging.info(f"Immagine AI salvata: {output_filepath}")
+
+        # Log del prompt rivisto se disponibile
+        if hasattr(response.data[0], 'revised_prompt') and response.data[0].revised_prompt:
+            logging.info(f"Prompt migliorato dall'AI: '{response.data[0].revised_prompt[:100]}...'")
+
+        return True
 
     except Exception as e:
         logging.error(f"Errore API OpenAI per generazione immagine: {e}")

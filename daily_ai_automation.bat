@@ -7,8 +7,8 @@ echo ========================================
 echo Start Time: %date% %time%
 echo.
 
-REM Vai nella cartella progetto
-cd /d "C:\Users\bellu\OneDrive\Desktop\Programmazione\Linkedin_Content_Helper_Clean"
+REM Vai nella cartella progetto (usa path dinamico)
+cd /d "%~dp0"
 
 REM Controlla che tutti i file esistano
 if not exist "daily_ai_automation.py" (

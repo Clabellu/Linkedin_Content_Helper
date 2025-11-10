@@ -1,0 +1,151 @@
+# ========================================
+# LINKEDIN CONTENT HELPER - GITIGNORE
+# ========================================
+
+# ----------------------------------------
+# API Keys e File Sensibili
+# ----------------------------------------
+.env
+*.env
+!.env.example
+.env.local
+.env.*.local
+secrets.json
+credentials.json
+
+# ----------------------------------------
+# File Generati dall'Applicazione
+# ----------------------------------------
+generated_posts/
+logs/
+reports/
+*.log
+
+# File di tracking articoli processati
+processed_articles.txt
+
+# ----------------------------------------
+# Python
+# ----------------------------------------
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# ----------------------------------------
+# IDE / Editor
+# ----------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ----------------------------------------
+# File Temporanei
+# ----------------------------------------
+temp_*
+tmp_*
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Immagini temporanee generate
+temp_*.png
+temp_*.jpg
+temp_*.jpeg
+temp_ai_image_*.png
+temp_template_*.png
+
+# ----------------------------------------
+# Sistema Operativo
+# ----------------------------------------
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+.directory
+.Trash-*
+
+# ----------------------------------------
+# Backup e Archivi
+# ----------------------------------------
+*.zip
+*.tar.gz
+*.rar
+backup/
+old/
+archive/
+
+# ----------------------------------------
+# Database (se aggiunti in futuro)
+# ----------------------------------------
+*.db
+*.sqlite
+*.sqlite3
+
+# ----------------------------------------
+# Log specifici applicazione
+# ----------------------------------------
+logs/
+*.log
+linkedin_generator_*.log
+enhanced_automation_*.log
+scheduler_*.log
+automation_*.log

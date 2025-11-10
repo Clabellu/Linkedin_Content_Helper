@@ -2,8 +2,11 @@
 REM automated_ai_content.bat - Script ottimizzato per Task Scheduler
 REM Questo script viene eseguito automaticamente dal Task Scheduler
 
-REM Imposta variabili
-set PROJECT_DIR=C:\Users\bellu\OneDrive\Desktop\Programmazione\Linkedin_Content_Helper_Clean
+REM Imposta variabili (usa path dinamico)
+set PROJECT_DIR=%~dp0
+REM Rimuovi il trailing backslash se presente
+if "%PROJECT_DIR:~-1%"=="\" set PROJECT_DIR=%PROJECT_DIR:~0,-1%
+
 set VENV_PYTHON=%PROJECT_DIR%\venv\Scripts\python.exe
 set LOG_FILE=%PROJECT_DIR%\logs\scheduler_%date:~-4,4%%date:~-7,2%%date:~-10,2%_%time:~0,2%%time:~3,2%.log
 

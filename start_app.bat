@@ -2,12 +2,12 @@
 title AI Content Helper - Launcher
 
 echo ==========================================
-echo      AI CONTENT HELPER - LAUNCHER  
+echo      AI CONTENT HELPER - LAUNCHER
 echo ==========================================
 echo.
 
-REM Vai nella cartella progetto
-cd /d "C:\Users\bellu\OneDrive\Desktop\Programmazione\Linkedin_Content_Helper_Clean"
+REM Vai nella cartella del progetto (usa path dinamico)
+cd /d "%~dp0"
 
 REM Verifica che i file esistano
 if not exist "main_launcher.py" (
