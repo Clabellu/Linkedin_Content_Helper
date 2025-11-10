@@ -14,14 +14,15 @@ class MainLauncher:
     def setup_window(self):
         """Configura la finestra principale"""
         self.root.title("AI Content Helper - Launcher")
-        self.root.geometry("500x400")
-        self.root.resizable(False, False)
+        self.root.geometry("600x600")
+        self.root.resizable(True, True)
+        self.root.minsize(500, 500)
         
         # Centra la finestra
         self.root.update_idletasks()
-        x = (self.root.winfo_screenwidth() // 2) - (500 // 2)
-        y = (self.root.winfo_screenheight() // 2) - (400 // 2)
-        self.root.geometry(f"500x400+{x}+{y}")
+        x = (self.root.winfo_screenwidth() // 2) - (600 // 2)
+        y = (self.root.winfo_screenheight() // 2) - (600 // 2)
+        self.root.geometry(f"600x600+{x}+{y}")
         
         # Sfondo
         self.root.configure(bg="#f0f0f0")

@@ -6,8 +6,8 @@ echo      AI CONTENT HELPER - LAUNCHER
 echo ==========================================
 echo.
 
-REM Vai nella cartella progetto
-cd /d "C:\Users\bellu\OneDrive\Desktop\Programmazione\Linkedin_Content_Helper_Clean"
+REM Vai nella cartella dello script (automatico)
+cd /d "%~dp0"
 
 REM Verifica che i file esistano
 if not exist "main_launcher.py" (
