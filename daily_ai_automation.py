@@ -376,45 +376,67 @@ def generate_post_image_google(image_generation_prompt, output_filepath, api_key
 
 def generate_post_image_ai(image_generation_prompt, output_filepath, api_key):
     """
-    Genera un'immagine basata su un prompt testuale usando OpenAI DALL-E 3 API
+    Genera un'immagine basata su un prompt testuale usando OpenAI API
+    Supporta gpt-image-1 (migliore qualità) con fallback automatico a dall-e-3
+    Usa base64 per efficienza (no download HTTP aggiuntivo)
     """
     logging.info(f"Richiesta generazione immagine AI: '{image_generation_prompt[:100]}...'")
 
-    try:
-        client = openai.OpenAI(api_key=api_key)
+    # Prova prima con gpt-image-1 (modello più avanzato), poi fallback a dall-e-3
+    models_to_try = [
+        {"name": "gpt-image-1", "quality": "auto"},
+        {"name": "dall-e-3", "quality": "standard"}
+    ]
 
-        # Usa l'API corretta di OpenAI per la generazione di immagini con DALL-E 3
-        response = client.images.generate(
-            model="dall-e-3",
-            prompt=image_generation_prompt,
-            size="1024x1024",
-            quality="standard",
-            n=1
-        )
+    for model_config in models_to_try:
+        model = model_config["name"]
+        quality = model_config["quality"]
 
-        # Estrae l'URL dell'immagine generata
-        image_url = response.data[0].url
+        try:
+            client = openai.OpenAI(api_key=api_key)
 
-        # Scarica l'immagine dall'URL
-        import requests
-        image_response = requests.get(image_url, timeout=30)
-        image_response.raise_for_status()
+            logging.info(f"Tentativo generazione con modello: {model}")
 
-        # Salva l'immagine nel file
-        with open(output_filepath, 'wb') as f:
-            f.write(image_response.content)
+            # Usa b64_json invece di URL (più efficiente, no richiesta HTTP extra)
+            response = client.images.generate(
+                model=model,
+                prompt=image_generation_prompt,
+                size="1024x1024",
+                quality=quality,
+                response_format="b64_json",  # Base64 diretto invece di URL
+                n=1
+            )
 
-        logging.info(f"Immagine AI salvata: {output_filepath}")
+            # Decodifica base64 direttamente (no download)
+            image_base64 = response.data[0].b64_json
+            image_bytes = base64.b64decode(image_base64)
 
-        # Log del prompt rivisto se disponibile
-        if hasattr(response.data[0], 'revised_prompt') and response.data[0].revised_prompt:
-            logging.info(f"Prompt migliorato dall'AI: '{response.data[0].revised_prompt[:100]}...'")
+            # Salva l'immagine nel file
+            with open(output_filepath, 'wb') as f:
+                f.write(image_bytes)
 
-        return True
+            logging.info(f"Immagine AI salvata con {model}: {output_filepath}")
 
-    except Exception as e:
-        logging.error(f"Errore API OpenAI per generazione immagine: {e}")
-        return False
+            # Log del prompt rivisto se disponibile
+            if hasattr(response.data[0], 'revised_prompt') and response.data[0].revised_prompt:
+                logging.info(f"Prompt migliorato dall'AI: '{response.data[0].revised_prompt[:100]}...'")
+
+            return True
+
+        except Exception as e:
+            error_msg = str(e)
+
+            # Se gpt-image-1 fallisce (es. non autorizzato), prova dall-e-3
+            if model == "gpt-image-1":
+                logging.warning(f"Modello {model} non disponibile: {error_msg}")
+                logging.info("Fallback automatico a dall-e-3...")
+                continue
+
+            # Se anche dall-e-3 fallisce, restituisci errore
+            logging.error(f"Errore API OpenAI per generazione immagine con {model}: {e}")
+            return False
+
+    return False
 
 def create_template_image(article_data, post_content):
     """Crea immagine template quando API AI non è disponibile (fallback)"""

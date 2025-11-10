@@ -261,42 +261,63 @@ def generate_post_image(image_generation_prompt, output_filepath, provider="open
         if not OPENAI_API_KEY:
             print("ERRORE: La chiave API di OpenAI non è configurata.")
             return False
-        
-        try:
-            client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
-            # Usa l'API corretta di OpenAI per la generazione di immagini
-            response = client.images.generate(
-                model="dall-e-3",
-                prompt=image_generation_prompt,
-                size="1024x1024",
-                quality="standard",
-                n=1
-            )
+        # Prova prima con gpt-image-1 (modello più avanzato), poi fallback a dall-e-3
+        models_to_try = [
+            {"name": "gpt-image-1", "quality": "auto"},
+            {"name": "dall-e-3", "quality": "standard"}
+        ]
 
-            # Estrae l'URL dell'immagine generata
-            image_url = response.data[0].url
+        for model_config in models_to_try:
+            model = model_config["name"]
+            quality = model_config["quality"]
 
-            # Scarica l'immagine dall'URL
-            import requests
-            image_response = requests.get(image_url)
-            image_response.raise_for_status()
+            try:
+                client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
-            # Salva l'immagine nel file
-            with open(output_filepath, 'wb') as f:
-                f.write(image_response.content)
+                print(f"Tentativo generazione con modello: {model}")
 
-            print(f"Immagine generata e salvata con successo in: {output_filepath}")
+                # Usa b64_json invece di URL (più efficiente, no richiesta HTTP extra)
+                response = client.images.generate(
+                    model=model,
+                    prompt=image_generation_prompt,
+                    size="1024x1024",
+                    quality=quality,
+                    response_format="b64_json",  # Base64 diretto invece di URL
+                    n=1
+                )
 
-            # Controlla se c'è un prompt rivisto
-            if hasattr(response.data[0], 'revised_prompt') and response.data[0].revised_prompt:
-                print(f"Prompt originale migliorato dall'IA: '{response.data[0].revised_prompt}'")
+                # Decodifica base64 direttamente (no download)
+                image_base64 = response.data[0].b64_json
+                image_bytes = base64.b64decode(image_base64)
 
-            return True
+                # Salva l'immagine nel file
+                with open(output_filepath, 'wb') as f:
+                    f.write(image_bytes)
 
-        except Exception as e:
-            print(f"ERRORE durante la generazione dell'immagine con OpenAI: {e}")
-            return False
+                print(f"Immagine generata e salvata con successo in: {output_filepath}")
+                print(f"Modello utilizzato: {model}")
+
+                # Controlla se c'è un prompt rivisto
+                if hasattr(response.data[0], 'revised_prompt') and response.data[0].revised_prompt:
+                    print(f"Prompt originale migliorato dall'IA: '{response.data[0].revised_prompt}'")
+
+                return True
+
+            except Exception as e:
+                error_msg = str(e)
+
+                # Se gpt-image-1 fallisce (es. non autorizzato), prova dall-e-3
+                if model == "gpt-image-1":
+                    print(f"Modello {model} non disponibile: {error_msg}")
+                    print("Fallback automatico a dall-e-3...")
+                    continue
+
+                # Se anche dall-e-3 fallisce, restituisci errore
+                print(f"ERRORE durante la generazione dell'immagine con {model}: {e}")
+                return False
+
+        return False
 
     print(f"ERRORE: Provider non supportato: {provider}")
     return False

@@ -45,7 +45,7 @@
 
 - **Claude AI** (Anthropic): Generazione testo post
 - **OpenAI GPT-4**: Fallback generazione testo
-- **DALL-E 3**: Generazione immagini
+- **GPT Image 1**: Generazione immagini (con fallback automatico a DALL-E 3)
 - **Google Gemini**: Alternativa immagini
 
 ---
