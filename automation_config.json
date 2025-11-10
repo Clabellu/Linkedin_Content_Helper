@@ -1,0 +1,85 @@
+{
+  "schedule": {
+    "execution_time": "08:00",
+    "posts_per_day": 3,
+    "enabled": true
+  },
+  "ai_sources": {
+    "rss_feeds": [
+      "https://www.technologyreview.com/feed/",
+      "https://ai.googleblog.com/feeds/posts/default",
+      "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "https://www.theverge.com/rss/index.xml",
+      "https://feeds.feedburner.com/oreilly/radar",
+      "https://blog.openai.com/rss.xml",
+      "https://blogs.microsoft.com/ai/feed/",
+      "https://venturebeat.com/category/ai/feed/",
+      "https://artificialintelligence-news.com/feed/",
+      "https://www.wired.com/feed/tag/ai/latest/rss",
+      "https://hai.stanford.edu/news/rss.xml",
+      "https://bair.berkeley.edu/blog/feed.xml",
+      "https://deepmind.com/blog/rss.xml",
+      "https://research.facebook.com/blog/rss/",
+      "https://www.anthropic.com/news/rss",
+      "https://distill.pub/rss.xml",
+      "https://thegradient.pub/rss/",
+      "https://www.unite.ai/feed/",
+      "https://syncedreview.com/feed/",
+      "https://www.marktechpost.com/feed/"
+    ]
+  },
+  "selection_criteria": {
+    "ai_keywords": [
+      "artificial intelligence", "AI", "machine learning", "deep learning",
+      "neural network", "ChatGPT", "GPT", "OpenAI", "Claude", "Anthropic",
+      "LLM", "large language model", "generative AI", "automation", "robotics",
+      "computer vision", "natural language processing", "NLP", "transformer",
+      "diffusion model", "DALL-E", "Midjourney", "stable diffusion", "AGI",
+      "reinforcement learning", "AI ethics", "AI safety", "AI governance",
+      "multimodal AI", "AI agents", "autonomous systems", "AI research",
+      "AI applications", "AI tools", "AI breakthrough", "AI innovation",
+      "AI industry", "AI market", "AI investment", "AI startup", "AI policy"
+    ],
+    "freshness_weight": 0.4,
+    "relevance_weight": 0.6,
+    "min_article_length": 200,
+    "max_articles_per_source": 5,
+    "exclude_keywords": [
+      "crypto", "blockchain", "NFT", "advertisement", "sponsored"
+    ]
+  },
+  "content_generation": {
+    "post_styles": [
+      "educational",
+      "thought_leadership", 
+      "news_analysis",
+      "practical_tips",
+      "case_study"
+    ],
+    "max_post_length": 1500,
+    "include_hashtags": true,
+    "hashtag_count": 5,
+    "include_call_to_action": true,
+    "languages": ["italiano", "inglese"]
+  },
+  "advanced_sources": {
+    "academic_papers": {
+      "enabled": false,
+      "arxiv_categories": ["cs.AI", "cs.LG", "cs.CV", "cs.CL"],
+      "max_papers_per_day": 2
+    },
+    "social_media": {
+      "enabled": false,
+      "twitter_accounts": [
+        "@karpathy", "@ylecun", "@AndrewYNg", "@drfeifei",
+        "@goodfellow_ian", "@mmbronstein", "@jeffdean"
+      ]
+    },
+    "api_sources": {
+      "enabled": false,
+      "google_news_api": false,
+      "reddit_api": false,
+      "hackernews_api": false
+    }
+  }
+}

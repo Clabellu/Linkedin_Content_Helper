@@ -1,0 +1,9 @@
+https://news.mit.edu/rss/topic/artificial-intelligence2
+https://openai.com/news/rss.xml
+https://deepmind.com/blog/feed/basic
+https://blogs.microsoft.com/ai/feed/
+http://bair.berkeley.edu/blog/feed.xml
+https://www.technologyreview.com/topic/artificial-intelligence/
+https://machinelearningmastery.com/blog/feed/
+https://blogs.nvidia.com/blog/category/ai/feed/
+https://aiweekly.co/rss
