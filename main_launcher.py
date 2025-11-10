@@ -19,8 +19,9 @@ class MainLauncher:
             title="LinkedIn Content Helper",
             themename="cosmo",  # Tema moderno e pulito
             size=(900, 700),
-            resizable=(False, False)
+            resizable=(True, True)
         )
+        self.root.minsize(800, 600)
 
         self.setup_ui()
         self.center_window()
