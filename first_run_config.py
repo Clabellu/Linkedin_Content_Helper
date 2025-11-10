@@ -7,6 +7,7 @@ Wizard di configurazione guidata per le API keys al primo avvio
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 from ttkbootstrap.dialogs import Messagebox
+from ttkbootstrap.scrolled import ScrolledFrame
 import os
 import re
 from pathlib import Path
@@ -18,8 +19,8 @@ class FirstRunConfigGUI:
         self.root = ttk.Window(
             title="LinkedIn Content Helper - Configurazione Iniziale",
             themename="superhero",  # Tema scuro e moderno per wizard
-            size=(800, 750),
-            resizable=(False, False)
+            size=(850, 650),
+            resizable=(True, True)  # Permette ridimensionamento
         )
 
         # Variabili per le API keys
@@ -41,9 +42,9 @@ class FirstRunConfigGUI:
     def center_window(self):
         """Centra la finestra sullo schermo"""
         self.root.update_idletasks()
-        x = (self.root.winfo_screenwidth() // 2) - (800 // 2)
-        y = (self.root.winfo_screenheight() // 2) - (750 // 2)
-        self.root.geometry(f"800x750+{x}+{y}")
+        x = (self.root.winfo_screenwidth() // 2) - (850 // 2)
+        y = (self.root.winfo_screenheight() // 2) - (650 // 2)
+        self.root.geometry(f"850x650+{x}+{y}")
 
     def load_existing_env(self):
         """Carica le API keys esistenti dal file .env"""
@@ -120,10 +121,10 @@ class FirstRunConfigGUI:
         ttk.Separator(self.root, bootstyle="secondary").pack(fill=X, padx=30, pady=10)
 
         # ============================================
-        # API KEYS SECTION
+        # API KEYS SECTION (Scrollable)
         # ============================================
-        keys_container = ttk.Frame(self.root)
-        keys_container.pack(fill=BOTH, expand=True, padx=30, pady=10)
+        keys_container = ScrolledFrame(self.root, autohide=True)
+        keys_container.pack(fill=BOTH, expand=True, padx=10, pady=10)
 
         # Anthropic API Key (Obbligatorio)
         self.create_api_key_card(
@@ -217,7 +218,7 @@ class FirstRunConfigGUI:
             bootstyle=badge_style,
             padding=20
         )
-        card.pack(fill=X, pady=10)
+        card.pack(fill=X, padx=20, pady=10)
 
         # Header con titolo e badge
         header = ttk.Frame(card)
