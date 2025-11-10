@@ -264,23 +264,33 @@ Cosa ne pensi? Come vedi l'AI integrata nel tuo settore?
     return template
 
 def create_post_image(article_data, post_content, provider="openai"):
-    """Crea immagine AI per il post usando OpenAI o Google"""
+    """Crea immagine AI per il post usando OpenAI o Google, basata sul contenuto generato"""
     try:
         logging.info(f"Generazione immagine AI per il post usando {provider.upper()}")
-        
-        # Genera prompt per l'immagine basato sull'articolo
+
+        # Genera prompt per l'immagine basato sul POST GENERATO e sull'articolo
         title = article_data.get('title', 'AI Innovation')
         summary = article_data.get('summary', 'Latest AI technology advancement')
-        
-        image_prompt = f"""Create a professional, modern image for a LinkedIn post about: {title}. 
-The image should be:
+
+        # Usa il contenuto del post generato (primi 500 caratteri per il contesto)
+        post_excerpt = post_content[:500] if post_content else ""
+
+        image_prompt = f"""Create a professional, modern image for this LinkedIn post about AI/Technology.
+
+POST CONTENT (tone and angle to match):
+{post_excerpt}
+
+ORIGINAL ARTICLE REFERENCE:
+Title: {title}
+Summary: {summary[:150]}
+
+IMAGE REQUIREMENTS:
 - Professional and business-appropriate for LinkedIn
+- Visually represent the post's message and tone
 - Related to artificial intelligence and technology
 - Clean, modern design with tech/AI elements
-- Suitable for social media sharing
 - High quality and visually appealing
-
-Context: {summary[:200]}
+- Should complement the written content's perspective
 
 Style: Professional, tech-focused, modern graphics, suitable for LinkedIn business post."""
         
